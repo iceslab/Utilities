@@ -12,6 +12,7 @@
 #include <chrono>
 #endif // _WIN32 && !defined USE_CHRONO
 
+#include "asserts.h"
 #include <cmath>
 
 enum Resolution

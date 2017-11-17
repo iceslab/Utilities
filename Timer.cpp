@@ -10,7 +10,6 @@ LARGE_INTEGER Timer::frequency = frequency;
 BOOL Timer::isFrequencyInitialized = QueryPerformanceFrequency(&frequency);
 #endif
 
-
 Timer::Timer()
 {
 #ifndef USE_CHRONO
@@ -58,8 +57,6 @@ double Timer::getTime(Resolution resolution)
 
 double Timer::convertResolution(Resolution from, Resolution to, double time)
 {
-#ifdef _DEBUG
-    auto d = time * (static_cast<double>(from) / static_cast<double>(to));
-#endif
+    DEBUG_CALL(auto d = time * (static_cast<double>(from) / static_cast<double>(to)));
     return time * (static_cast<double>(from) / static_cast<double>(to));
 }

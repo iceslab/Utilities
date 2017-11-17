@@ -1,20 +1,39 @@
-#pragma once
+#ifndef _ASSERTS_H_INCLUDED_
+#define _ASSERTS_H_INCLUDED_
+
 #include <cstdio>
 #include <climits>
 #include <cassert>
 
+#ifdef _WIN32
 #define NOMINMAX // Disable macros for min and max
 #include <Windows.h>
+#endif // _WIN32
 
 #define QUOTE(x) #x
 
-#define VERBOSITY_LEVEL_WARNING 0
-#define VERBOSITY_LEVEL_INFO 1
-#define VERBOSITY_LEVEL_DEBUG 2
+#define VERBOSITY_LEVEL_WARNING 1
+#define VERBOSITY_LEVEL_INFO 2
+#define VERBOSITY_LEVEL_DEBUG 3
 
 #ifndef VERBOSITY_LEVEL
+#pragma message("Warning: VERBOSITY_LEVEL not defined. Defaulting to VERBOSITY_LEVEL_WARNING")
 #define VERBOSITY_LEVEL VERBOSITY_LEVEL_WARNING
 #endif
+
+inline void breakWhenDebuggerPresent()
+{
+#ifdef _WIN32
+    if (IsDebuggerPresent())
+    {
+        DebugBreak();
+    }
+#endif // _WIN32
+}
+
+#ifndef UNREFERENCED_PARAMETER
+#define UNREFERENCED_PARAMETER(P) (P)
+#endif //!UNREFERENCED_PARAMETER
 
 #ifdef _DEBUG
 #define PRINT_SEPARATOR() \
@@ -58,10 +77,7 @@ do \
         fprintf(stderr, "Assertion failed: " QUOTE(expr) ", file %s, line %d\n", __FILE__, __LINE__); \
         fflush(stderr); \
         fflush(stdout); \
-        if (IsDebuggerPresent()) \
-        { \
-            DebugBreak(); \
-        } \
+        breakWhenDebuggerPresent(); \
         abort(); \
     } \
 } while (false);
@@ -75,10 +91,7 @@ do{ \
         fprintf(stderr, ", file %s, line %d\n", __FILE__, __LINE__); \
         fflush(stderr); \
         fflush(stdout); \
-        if(IsDebuggerPresent()) \
-        { \
-            DebugBreak(); \
-        } \
+        breakWhenDebuggerPresent(); \
         abort(); \
     } \
 } while (false);
@@ -147,4 +160,5 @@ do \
 
 #define DEBUG_PRINTLN_VERBOSE_DEBUG(format, ...)
 #define DEBUG_PRINT_VERBOSE_DEBUG(format, ...)
-#endif
+#endif // _DEBUG
+#endif // !_ASSERTS_H_INCLUDED_
