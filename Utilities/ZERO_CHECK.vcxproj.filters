@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\cieslbar\Repos\Skyscrappers\Utilities\Utilities\CMakeFiles\8d5f82982de86a6162992f3b2959297a\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{0B610E4E-3425-307E-836E-CECE818B38CC}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
