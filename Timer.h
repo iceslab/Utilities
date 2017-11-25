@@ -14,6 +14,7 @@
 
 #include "asserts.h"
 #include <cmath>
+#include <tuple>
 
 enum Resolution
 {
@@ -33,6 +34,8 @@ public:
     double getTime(Resolution resolution = SECONDS);
 
     static double convertResolution(Resolution from, Resolution to, double time);
+    template<typename ReturnType, typename... ArgsTypes>
+    static std::pair<ReturnType, Timer> measureTime(ReturnType(*fn)(ArgsTypes...), ArgsTypes&&... args);
 private:
 #ifdef USE_CHRONO
     std::chrono::time_point<std::chrono::high_resolution_clock> chStart;
@@ -46,3 +49,14 @@ private:
 };
 
 #endif // _TIMER_H_INCLUDED_
+
+template<typename ReturnType, typename ... ArgsTypes>
+inline std::pair<ReturnType, Timer> Timer::measureTime(ReturnType(*fn)(ArgsTypes...), ArgsTypes&&... args)
+{
+    Timer timer;
+    timer.start();
+    ReturnType retVal = fn(args...);
+    timer.stop();
+
+    return std::make_pair(retVal, timer);
+}
