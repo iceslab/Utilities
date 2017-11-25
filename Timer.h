@@ -25,6 +25,10 @@ enum Resolution
     SECONDS = MILLISECONDS * 1000
 };
 
+// Forward declaration
+template <typename ReturnType>
+struct MeasurementResult;
+
 class Timer
 {
 public:
@@ -37,10 +41,16 @@ public:
     static double convertResolution(Resolution from, Resolution to, double time);
     
     template<typename ReturnType, typename... ArgsTypes>
-    static std::pair<ReturnType, Timer> measureTime(ReturnType(*fn)(ArgsTypes...), ArgsTypes&&... args);
+    static MeasurementResult<ReturnType> measureTime(ReturnType(*fn)(ArgsTypes...), ArgsTypes&&... args);
 
     template<typename ReturnType, typename... ArgsTypes>
-    static std::pair<ReturnType, Timer> measureTime(std::function<ReturnType(ArgsTypes...)> fn, ArgsTypes&&... args);
+    static MeasurementResult<ReturnType> measureTime(std::function<ReturnType(ArgsTypes...)> fn, ArgsTypes&&... args);
+
+    template<typename... ArgsTypes>
+    static Timer measureTime(void(*fn)(ArgsTypes...), ArgsTypes&&... args);
+
+    template<typename... ArgsTypes>
+    static Timer measureTime(std::function<void(ArgsTypes...)> fn, ArgsTypes && ...args);
 private:
 #ifdef USE_CHRONO
     std::chrono::time_point<std::chrono::high_resolution_clock> chStart;
@@ -53,23 +63,55 @@ private:
 #endif
 };
 
-#endif // _TIMER_H_INCLUDED_
+template <typename ReturnType>
+struct MeasurementResult : public Timer
+{
+    ReturnType functionResult;
+};
+
 
 template<typename ReturnType, typename ... ArgsTypes>
-inline std::pair<ReturnType, Timer> Timer::measureTime(ReturnType(*fn)(ArgsTypes...), ArgsTypes&&... args)
+inline MeasurementResult<ReturnType> Timer::measureTime(ReturnType(*fn)(ArgsTypes...), ArgsTypes&&... args)
 {
-    std::function<ReturnType(ArgsTypes...)> function(fn);
+    MeasurementResult<ReturnType> retVal;
+    retVal.start();
+    retVal.functionResult = fn(args...);
+    retVal.stop();
 
-    return measureTime(function, args);
+    return retVal;
 }
 
 template<typename ReturnType, typename ...ArgsTypes>
-inline std::pair<ReturnType, Timer> Timer::measureTime(std::function<ReturnType(ArgsTypes...)> fn, ArgsTypes && ...args)
+inline MeasurementResult<ReturnType> Timer::measureTime(std::function<ReturnType(ArgsTypes...)> fn, ArgsTypes && ...args)
+{
+    MeasurementResult<ReturnType> retVal;
+    retVal.start();
+    retVal.functionResult = fn(args...);
+    retVal.stop();
+
+    return retVal;
+}
+
+template<typename ...ArgsTypes>
+inline Timer Timer::measureTime(void(*fn)(ArgsTypes...), ArgsTypes && ...args)
 {
     Timer timer;
     timer.start();
-    ReturnType retVal = fn(args...);
+    fn(args...);
     timer.stop();
 
-    return std::make_pair(retVal, timer);
+    return timer;
 }
+
+template<typename ...ArgsTypes>
+inline Timer Timer::measureTime(std::function<void(ArgsTypes...)> fn, ArgsTypes && ...args)
+{
+    Timer timer;
+    timer.start();
+    fn(args...);
+    timer.stop();
+
+    return timer;
+}
+
+#endif // _TIMER_H_INCLUDED_
