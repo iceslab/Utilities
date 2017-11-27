@@ -12,12 +12,15 @@
 
 #define QUOTE(x) #x
 
-#define VERBOSITY_LEVEL_WARNING 1
-#define VERBOSITY_LEVEL_INFO 2
-#define VERBOSITY_LEVEL_DEBUG 3
+#define VERBOSITY_LEVEL_NONE 0
+#define VERBOSITY_LEVEL_ERROR 1
+#define VERBOSITY_LEVEL_WARNING 2
+#define VERBOSITY_LEVEL_INFO 3
+#define VERBOSITY_LEVEL_DEBUG 4
 
 #ifndef VERBOSITY_LEVEL
 #pragma message("Warning: VERBOSITY_LEVEL not defined. Defaulting to VERBOSITY_LEVEL_WARNING")
+#pragma message("Warning: VERBOSITY_LEVELS={0, 1, 2, 3, 4} -> NONE, ERROR, WARNING, INFO, DEBUG")
 #define VERBOSITY_LEVEL VERBOSITY_LEVEL_WARNING
 #endif
 
@@ -35,7 +38,7 @@ inline void breakWhenDebuggerPresent()
 #define UNREFERENCED_PARAMETER(P) (P)
 #endif //!UNREFERENCED_PARAMETER
 
-#ifdef _DEBUG
+#if _DEBUG || !NDEBUG
 #define PRINT_SEPARATOR() \
 do \
 { \
@@ -160,5 +163,5 @@ do \
 
 #define DEBUG_PRINTLN_VERBOSE_DEBUG(format, ...)
 #define DEBUG_PRINT_VERBOSE_DEBUG(format, ...)
-#endif // _DEBUG
+#endif // _DEBUG || !NDEBUG
 #endif // !_ASSERTS_H_INCLUDED_
