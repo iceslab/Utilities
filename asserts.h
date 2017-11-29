@@ -38,8 +38,6 @@ inline void breakWhenDebuggerPresent()
 #define UNREFERENCED_PARAMETER(P) (P)
 #endif //!UNREFERENCED_PARAMETER
 
-#define VA_ARGS(...) , ##__VA_ARGS__
-
 #if _DEBUG || !NDEBUG
 #define PRINT_SEPARATOR() \
 do \
@@ -49,24 +47,24 @@ do \
 
 #define DEBUG_PRINTLN_VERBOSE(format, ...) \
 do{ \
-    fprintf(stderr, format, VA_ARGS(__VA_ARGS__)); \
+    fprintf(stderr, format, __VA_ARGS__); \
     fprintf(stderr, ", file %s, line %d\n", __FILE__, __LINE__); \
 } while (false);
 
 #define DEBUG_PRINT_VERBOSE(format, ...) \
 do{ \
-    fprintf(stderr, format, VA_ARGS(__VA_ARGS__)); \
+    fprintf(stderr, format, __VA_ARGS__; \
     fprintf(stderr, ", file %s, line %d", __FILE__, __LINE__); \
 } while (false);
 
 #define DEBUG_PRINTLN(format, ...) \
 do{ \
-    fprintf(stderr, format"\n", VA_ARGS(__VA_ARGS__)); \
+    fprintf(stderr, format"\n", __VA_ARGS__); \
 } while (false);
 
 #define DEBUG_PRINT(format, ...) \
 do{ \
-    fprintf(stderr, format, VA_ARGS(__VA_ARGS__)); \
+    fprintf(stderr, format, __VA_ARGS__); \
 } while (false);
 
 #define DEBUG_CALL(expr) \
@@ -92,7 +90,7 @@ do{ \
     if((expr) == false) \
     { \
         fprintf(stderr, "Assertion failed: " QUOTE(expr) ", "); \
-        fprintf(stderr, format, VA_ARGS(__VA_ARGS__)); \
+        fprintf(stderr, format, __VA_ARGS__); \
         fprintf(stderr, ", file %s, line %d\n", __FILE__, __LINE__); \
         fflush(stderr); \
         fflush(stdout); \
@@ -105,7 +103,7 @@ do{ \
 do \
 { \
     fprintf(stderr, "Fatal error occured: "); \
-    fprintf(stderr, format, VA_ARGS(__VA_ARGS__)); \
+    fprintf(stderr, format, __VA_ARGS__); \
     fprintf(stderr, ", file %s, line %d\n", __FILE__, __LINE__); \
 } while (false);
 
@@ -117,24 +115,24 @@ do \
 
 #ifdef VERBOSITY_LEVEL
 #if VERBOSITY_LEVEL >= VERBOSITY_LEVEL_WARNING
-#define DEBUG_PRINTLN_VERBOSE_WARNING(format, ...) DEBUG_PRINTLN_VERBOSE(format, VA_ARGS(__VA_ARGS__))
-#define DEBUG_PRINT_VERBOSE_WARNING(format, ...) DEBUG_PRINT_VERBOSE(format, VA_ARGS(__VA_ARGS__))
+#define DEBUG_PRINTLN_VERBOSE_WARNING(format, ...) DEBUG_PRINTLN_VERBOSE(format, __VA_ARGS__)
+#define DEBUG_PRINT_VERBOSE_WARNING(format, ...) DEBUG_PRINT_VERBOSE(format, __VA_ARGS__)
 #else
 #define DEBUG_PRINTLN_VERBOSE_WARNING(format, ...)
 #define DEBUG_PRINT_VERBOSE_WARNING(format, ...)
 #endif
 
 #if VERBOSITY_LEVEL >= VERBOSITY_LEVEL_INFO
-#define DEBUG_PRINTLN_VERBOSE_INFO(format, ...) DEBUG_PRINTLN_VERBOSE(format, VA_ARGS(__VA_ARGS__))
-#define DEBUG_PRINT_VERBOSE_INFO(format, ...) DEBUG_PRINT_VERBOSE(format, VA_ARGS(__VA_ARGS__))
+#define DEBUG_PRINTLN_VERBOSE_INFO(format, ...) DEBUG_PRINTLN_VERBOSE(format, __VA_ARGS__)
+#define DEBUG_PRINT_VERBOSE_INFO(format, ...) DEBUG_PRINT_VERBOSE(format, __VA_ARGS__)
 #else
 #define DEBUG_PRINTLN_VERBOSE_INFO(format, ...)
 #define DEBUG_PRINT_VERBOSE_INFO(format, ...)
 #endif
 
 #if VERBOSITY_LEVEL >= VERBOSITY_LEVEL_DEBUG
-#define DEBUG_PRINTLN_VERBOSE_DEBUG(format, ...) DEBUG_PRINTLN_VERBOSE(format, VA_ARGS(__VA_ARGS__))
-#define DEBUG_PRINT_VERBOSE_DEBUG(format, ...) DEBUG_PRINT_VERBOSE(format, VA_ARGS(__VA_ARGS__))
+#define DEBUG_PRINTLN_VERBOSE_DEBUG(format, ...) DEBUG_PRINTLN_VERBOSE(format, __VA_ARGS__)
+#define DEBUG_PRINT_VERBOSE_DEBUG(format, ...) DEBUG_PRINT_VERBOSE(format, __VA_ARGS__)
 #else
 #define DEBUG_PRINTLN_VERBOSE_DEBUG(format, ...)
 #define DEBUG_PRINT_VERBOSE_DEBUG(format, ...)
