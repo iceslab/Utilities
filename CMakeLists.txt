@@ -4,6 +4,8 @@
 cmake_minimum_required (VERSION 2.6)
 project (Utilities LANGUAGES CXX)
 
+set (CMAKE_CXX_STANDARD 11)
+
 file(GLOB CPP_FILES *.cpp)
 file(GLOB H_FILES *.h)
 
